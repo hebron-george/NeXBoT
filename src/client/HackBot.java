@@ -65,6 +65,11 @@ public class HackBot {
                 writer.flush( );
             }
             
+            if (line.startsWith(":Damaos")) {
+            	writer.write("PRIVMSG " + channel + " :STFU\r\n");
+            	writer.flush( );
+            }
+            
             for (String i : line.split(" "))
             {
             	if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v="))
