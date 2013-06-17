@@ -9,12 +9,12 @@ public class HackBot {
     public static void main(String[] args) throws Exception {
 
         // The server to connect to and our details.
-        String server = "server";
-        String nick = "nick";
-        String login = "login";
-
+        String server = "irc.quakenet.org";
+        String nick = "Nexdot";
+        String login = "Nexdot";
+        
         // The channel which the bot will join.
-        String channel = "#channel";
+        String channel = "#vashbottest";
         
         // Connect directly to the IRC server.
         Socket socket = new Socket(server, 6667);
@@ -72,7 +72,7 @@ public class HackBot {
             	if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v="))
             	{
             		YoutubeLink y = new YoutubeLink(i.substring(1));
-            		writer.write("PRIVMSG " + channel + " :Youtube Link Title: " + y.title + "\r\n");
+            		writer.write("PRIVMSG " + channel + " :" + y.title + " " + y.duration + "\r\n");
             		writer.flush();
             	}
             }

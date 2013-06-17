@@ -17,6 +17,10 @@ public class YoutubeLink {
 			
 			Document doc = Jsoup.connect(url).get();
 			title = doc.title();
+			duration = doc.select("meta[itemprop=duration]").attr("content");
+			duration = duration.replace("PT", "(");
+			duration = duration.replace('M',':');
+			duration = duration.replace('S',')');
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
