@@ -45,7 +45,6 @@ public class HackBot {
                 // We must respond to PINGs to avoid being disconnected.
                 writer.write("PONG " + line.substring(5) + "\r\n");
                 System.out.println("PONG " + line.substring(5) + "\r\n");
-                //writer.write("PRIVMSG " + channel + " :I got pinged!\r\n");
                 writer.flush( );
             }
         }
@@ -63,7 +62,6 @@ public class HackBot {
             if (line.startsWith("PING ")) {
                 // We must respond to PINGs to avoid being disconnected.
                 writer.write("PONG " + line.substring(5) + "\r\n");
-                writer.write("PRIVMSG " + channel + " :I got pinged!\r\n");
                 writer.flush( );
             }
             
@@ -72,7 +70,7 @@ public class HackBot {
             	if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v="))
             	{
             		YoutubeLink y = new YoutubeLink(i.substring(1));
-            		writer.write("PRIVMSG " + channel + " :" + y.title + " " + y.duration + "\r\n");
+            		writer.write("PRIVMSG " + channel + " :" + y.getTitle() + " " + y.getDuration() + "\r\n");
             		writer.flush();
             	}
             }

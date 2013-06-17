@@ -8,8 +8,8 @@ import org.jsoup.nodes.Document;
 
 
 public class YoutubeLink {
-	public String title = "";
-	public String duration = "";
+	private String title = "";
+	private String duration = "";
 	
 	YoutubeLink(String url)
 	{
@@ -31,5 +31,15 @@ public class YoutubeLink {
 	YoutubeLink()
 	{
 		
+	}
+	
+	public String getTitle()
+	{
+		return title;
+	}
+	
+	public String getDuration()
+	{
+		return duration;
 	}
 }
