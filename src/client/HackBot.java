@@ -76,6 +76,7 @@ public class HackBot {
             	{
             		YoutubeLink y = new YoutubeLink(i.substring(1));
             		writer.write("PRIVMSG " + channel + " :" + y.getTitle() + " " + y.getDuration() + "\r\n");
+            		writer.write("PRIVMSG " + channel + " :" + y.getDescription() + "\r\n");
             		writer.flush();
             	}
             }

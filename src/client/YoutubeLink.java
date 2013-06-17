@@ -11,6 +11,7 @@ public class YoutubeLink {
 	private String title = "";
 	private String duration = "";
 	private int durationMin = 0, durationSec = 0; 
+	private String description = "";
 	
 	YoutubeLink(String url)
 	{
@@ -25,6 +26,7 @@ public class YoutubeLink {
 			durationMin = Integer.parseInt(duration.split("M")[0]);
 			durationSec = Integer.parseInt(duration.split("M")[1]);	
 			
+			description = doc.select("meta[name=description]").attr("content");
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -45,8 +47,13 @@ public class YoutubeLink {
 	public String getDuration()
 	{
 		if(durationMin < 60)
-			return "(" + durationMin + ":" + durationSec + ")";
+			return String.format("(%d:%02d)", durationMin, durationSec);
 		else
-			return "(" + durationMin/60 + ":" + durationMin%60 + ":" + durationSec + ")";
+			return String.format("(%d:%d:%02d)", durationMin/60, durationMin%60, durationSec);
+	}
+	
+	public String getDescription()
+	{
+		return description;
 	}
 }
