@@ -2,7 +2,11 @@ package client;
 
 
 import java.io.*;
+
 import java.net.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class HackBot {
 
@@ -21,7 +25,10 @@ public class HackBot {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream( )));
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream( )));
         
+        Logger logger = LogManager.getLogger(HackBot.class.getName());
+        
         // Log on to the server.
+        logger.trace("Logging into server.");
         writer.write("NICK " + nick + "\r\n");
         System.out.println("NICK " + nick + "\r\n");
         writer.write("USER " + login + " 8 * : Java IRC Hacks Bot\r\n");
@@ -49,6 +56,8 @@ public class HackBot {
             }
         }
         
+        logger.trace("Logged into server successfully.");
+        
         // Join the channel.
         writer.write("JOIN " + channel + "\r\n");
         writer.flush( );
@@ -61,11 +70,13 @@ public class HackBot {
             
             if (line.startsWith("PING ")) {
                 // We must respond to PINGs to avoid being disconnected.
+            	logger.trace("Bot was pinged by server.");
                 writer.write("PONG " + line.substring(5) + "\r\n");
                 writer.flush( );
             }
             
             if (line.startsWith(":Damaos")) {
+            	logger.trace("Damaos said something.");
             	writer.write("PRIVMSG " + channel + " :STFU\r\n");
             	writer.flush( );
             }
@@ -74,6 +85,7 @@ public class HackBot {
             {
             	if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v="))
             	{
+            		logger.trace("Youtube link posted.");
             		YoutubeLink y = new YoutubeLink(i.substring(1));
             		writer.write("PRIVMSG " + channel + " :" + y.getTitle() + " " + y.getDuration() + "\r\n");
             		writer.write("PRIVMSG " + channel + " :" + y.getDescription() + "\r\n");
