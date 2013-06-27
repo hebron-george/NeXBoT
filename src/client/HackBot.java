@@ -9,16 +9,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class HackBot {
-
+	static CQ2 cq = null;
+	
     public static void main(String[] args) throws Exception {
 
         // The server to connect to and our details.
         String server = "irc.quakenet.org";
-        String nick = "Nexdot";
-        String login = "Nexdot";
+        String nick = "bawt";
+        String login = "bawt";
         
         // The channel which the bot will join.
-        String channel = "#vashbottest";
+        String channel = "#test";
+        
         
         // Connect directly to the IRC server.
         Socket socket = new Socket(server, 6667);
@@ -75,11 +77,6 @@ public class HackBot {
                 writer.flush( );
             }
             
-            if (line.startsWith(":Damaos")) {
-            	logger.trace("Damaos said something.");
-            	writer.write("PRIVMSG " + channel + " :STFU\r\n");
-            	writer.flush( );
-            }
             
             for (String i : line.split(" "))
             {
@@ -89,6 +86,17 @@ public class HackBot {
             		YoutubeLink y = new YoutubeLink(i.substring(1));
             		writer.write("PRIVMSG " + channel + " :" + y.getTitle() + " " + y.getDuration() + "\r\n");
             		writer.write("PRIVMSG " + channel + " :" + y.getDescription() + "\r\n");
+            		writer.flush();
+            	}
+            	else if (i.startsWith(":!online") && line.split(" ")[3].equals(":!online"))
+            	{
+            		logger.trace("!online command posted");
+                    // Connect to CQ2
+            		if (cq == null)
+            			cq = new CQ2("user", "password");
+            		String x = cq.isOnline(line.split(" ")[4]);
+            		writer.write("PRIVMSG " + channel + " :" + x + "\r\n");
+            		System.out.println("PRIVMSG " + channel + " :" + x + "\r\n");
             		writer.flush();
             	}
             }
