@@ -14,12 +14,12 @@ public class HackBot {
     public static void main(String[] args) throws Exception {
 
         // The server to connect to and our details.
-        String server = "irc.quakenet.org";
-        String nick = "bawt";
-        String login = "bawt";
+        String server = "server";
+        String nick = "nick";
+        String login = "login";
         
         // The channel which the bot will join.
-        String channel = "#test";
+        String channel = "#channel";
         
         
         // Connect directly to the IRC server.
@@ -30,7 +30,7 @@ public class HackBot {
         Logger logger = LogManager.getLogger(HackBot.class.getName());
         
         // Log on to the server.
-        logger.trace("Logging into server.");
+        logger.trace("Logging into IRC server.");
         writer.write("NICK " + nick + "\r\n");
         System.out.println("NICK " + nick + "\r\n");
         writer.write("USER " + login + " 8 * : Java IRC Hacks Bot\r\n");
@@ -72,7 +72,7 @@ public class HackBot {
             
             if (line.startsWith("PING ")) {
                 // We must respond to PINGs to avoid being disconnected.
-            	logger.trace("Bot was pinged by server.");
+            	logger.trace("Bot was pinged by server: " + line);
                 writer.write("PONG " + line.substring(5) + "\r\n");
                 writer.flush( );
             }
@@ -84,8 +84,8 @@ public class HackBot {
             	{
             		logger.trace("Youtube link posted.");
             		YoutubeLink y = new YoutubeLink(i.substring(1));
-            		writer.write("PRIVMSG " + channel + " :" + y.getTitle() + " " + y.getDuration() + "\r\n");
-            		writer.write("PRIVMSG " + channel + " :" + y.getDescription() + "\r\n");
+            		writer.write("PRIVMSG " + channel + " :" + "7(Youtube7) " + y.getTitle() + " " + y.getDuration() + "\r\n");
+            		writer.write("PRIVMSG " + channel + " :" + "7(Youtube7) " + y.getDescription() + "\r\n");
             		writer.flush();
             	}
             	else if (i.startsWith(":!online") && line.split(" ")[3].equals(":!online"))
@@ -94,10 +94,29 @@ public class HackBot {
                     // Connect to CQ2
             		if (cq == null)
             			cq = new CQ2("user", "password");
-            		String x = cq.isOnline(line.split(" ")[4]);
-            		writer.write("PRIVMSG " + channel + " :" + x + "\r\n");
-            		System.out.println("PRIVMSG " + channel + " :" + x + "\r\n");
-            		writer.flush();
+            		String user = line.split(" ")[4];
+            		String x = cq.isOnline(user);
+            		if (null == x)
+            		{
+            			writer.write("PRIVMSG " + channel + " :" + user + "? I'm having issues finding that mage right now. I might be having some sort of connection issue. Try again in a few seconds..."+ "\r\n");
+            			writer.flush();
+            			cq = null;
+            		}
+            		else
+            		{
+            			writer.write("PRIVMSG " + channel + " :" + x + "\r\n");
+            			System.out.println("PRIVMSG " + channel + " :" + x + "\r\n");
+            			writer.flush();
+            		}
+            	}
+            	else if (i.startsWith(":!rescheck") && line.split(" ")[3].equals(":!rescheck"))
+            	{
+            		logger.trace("!rescheck command posted");
+            		// Connect to CQ2
+            		if (cq == null)
+            			cq = new CQ2("Vashy", "cq2password");
+            		String user = line.split(" ")[4];
+            		cq.resCheck(user);
             	}
             }
             
