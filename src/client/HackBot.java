@@ -14,12 +14,14 @@ public class HackBot {
     public static void main(String[] args) throws Exception {
 
         // The server to connect to and our details.
-        String server = "server";
-        String nick = "nick";
-        String login = "login";
+        String server = "irc.quakenet.org";
+        String nick = "[nex]";
+        String login = "[nex]";
+        String cq2User = "";
+        String cq2Pass = "";
         
         // The channel which the bot will join.
-        String channel = "#channel";
+        String channel = "#siralim";
         
         
         // Connect directly to the IRC server.
@@ -93,7 +95,7 @@ public class HackBot {
             		logger.trace("!online command posted");
                     // Connect to CQ2
             		if (cq == null)
-            			cq = new CQ2("user", "password");
+            			cq = new CQ2(cq2User, cq2Pass);
             		String user = line.split(" ")[4];
             		String x = cq.isOnline(user);
             		if (null == x)
@@ -114,7 +116,7 @@ public class HackBot {
             		logger.trace("!rescheck command posted");
             		// Connect to CQ2
             		if (cq == null)
-            			cq = new CQ2("Vashy", "cq2password");
+            			cq = new CQ2(cq2User, cq2Pass);
             		String user = line.split(" ")[4];
             		cq.resCheck(user);
             	}

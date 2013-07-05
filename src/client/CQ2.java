@@ -116,7 +116,7 @@ public class CQ2 {
 				page = page + line;
 			}
 			System.out.println(page);
-			String myResPattern = ".+(Brimstone:.+(d+)<br>.+)";
+			String myResPattern = ".+(Brimstone:.+(d+)<br>)";
 			Pattern p = Pattern.compile(myResPattern);
 
 			Matcher m = p.matcher(page);
