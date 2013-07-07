@@ -12,32 +12,33 @@ public class HackBot implements Runnable {
 	private String nick = stringAccessor.getString("HackBot.nick"); //$NON-NLS-1$
 	private String login = stringAccessor.getString("HackBot.user"); //$NON-NLS-1$
 	private String cq2User = stringAccessor.getString("HackBot.cq2User"); //$NON-NLS-1$
-	private String cq2Pass = stringAccessor.getString("HackBot.cq2User"); //$NON-NLS-1$
+	private String cq2Pass = stringAccessor.getString("HackBot.cq2Pass"); //$NON-NLS-1$
 	private String channel = stringAccessor.getString("HackBot.channel"); //$NON-NLS-1$
 	
-	private Socket socket;
-	private BufferedWriter writer;
-	private BufferedReader reader;
-	private Logger logger;
-	private CQ2 cq;
+	private static Socket socket;
+	private static BufferedWriter writer;
+	private static BufferedReader reader;
+	private static Logger logger;
+	private static CQ2 cq;
 	
 	protected HackBot() {}
 	
 	public static void main(String[] args) throws Exception {
-        System.out.println("Starting program."); //$NON-NLS-1$
-		try {
+		logger = LogManager.getLogger(HackBot.class.getName());
+		logger.trace("Starting program."); //$NON-NLS-1$
+		
+        try {
         	new HackBot().start();
         } catch (java.io.IOException e) {
-        	System.out.println(e.getMessage());
+        	logger.trace(e.getMessage());
         }
 	}
 	
 	private void start() throws Exception {
-		System.out.println("Initializing."); //$NON-NLS-1$
-		this.socket = new Socket(server, 6667);
-		this.logger = LogManager.getLogger(HackBot.class.getName());
-        this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream( )));
-        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream( )));
+		logger.trace("Initializing."); //$NON-NLS-1$
+		HackBot.socket = new Socket(server, 6667);
+        HackBot.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream( )));
+        HackBot.reader = new BufferedReader(new InputStreamReader(socket.getInputStream( )));
 
         // Log on to the server.
         logger.trace("Logging into IRC server."); //$NON-NLS-1$
@@ -133,11 +134,13 @@ public class HackBot implements Runnable {
 	            		String user = line.split("\\s+")[4]; //$NON-NLS-1$
 	            		cq.resCheck(user);
 	            	}
+	            	
+
 	            }
 	            
 	        }
 		} catch (Exception e) {
-			
+			logger.trace(e.getMessage());
 		}
 	
 	}
