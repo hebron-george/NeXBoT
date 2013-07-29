@@ -17,3 +17,8 @@ Thumbs.db
 #################
 .project
 .classpath
+
+# Java Files #
+##############
+*.class
+/bin/
