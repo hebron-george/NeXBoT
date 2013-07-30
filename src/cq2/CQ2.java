@@ -1,4 +1,4 @@
-package client;
+package cq2;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -20,7 +20,7 @@ public class CQ2 {
 	HttpResponse response = null;
 	String line = "";
 
-	CQ2(String user, String password) {
+	public CQ2(String user, String password) {
 		String submit = "Login";
 		String url = "http://www.castlequest.be/index.php?action=login";
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);

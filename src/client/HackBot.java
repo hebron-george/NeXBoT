@@ -7,6 +7,8 @@ import java.net.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cq2.CQ2;
+
 public class HackBot implements Runnable {
 	private String server = stringAccessor.getString("HackBot.server"); //$NON-NLS-1$
 	private String nick = stringAccessor.getString("HackBot.nick"); //$NON-NLS-1$
