@@ -2,6 +2,11 @@ package cq2;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -14,11 +19,25 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+
+import client.stringAccessor;
+
 public class CQ2 {
 	HttpClient c = new DefaultHttpClient();
 	HttpPost post = null;
 	HttpResponse response = null;
 	String line = "";
+
+	private String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+	private String DB_URL = "jdbc:mysql://108.167.163.247/vashy_cq2";
+	//  Database credentials
+	private String USER = stringAccessor.getString("CQ2.db_user");
+	private String PASS = stringAccessor.getString("CQ2.db_pass");
+	
+	private String db_error = stringAccessor.getString("CQ2.db_error");
+	
+
+   private Connection conn = null;
 
 	public CQ2(String user, String password) {
 		String submit = "Login";
@@ -134,6 +153,38 @@ public class CQ2 {
 		}
 
 		return null;
+	}
+	
+	public String findReveal(String user)
+	{
+	
+		if (user.equals("") || user.equals(null))
+			return "";
+		try
+		{
+			//STEP 2: Register JDBC driver
+			Class.forName("com.mysql.jdbc.Driver");
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			
+			String sql = "SELECT user FROM reveals WHERE user LIKE ? LIMIT 1";
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			prepStmt.setString(1, "%" + user + "%");
+			ResultSet rs = prepStmt.executeQuery();
+			
+			if (rs.next())
+			{
+				return rs.getString("user");
+			}
+			
+		}
+		catch (Exception ex)
+		{
+			System.out.println("Could not connect to database.");
+			return db_error;
+		}
+		
+		return "";
 	}
 
 }

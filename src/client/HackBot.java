@@ -16,6 +16,7 @@ public class HackBot implements Runnable {
 	private String cq2User = stringAccessor.getString("HackBot.cq2User"); //$NON-NLS-1$
 	private String cq2Pass = stringAccessor.getString("HackBot.cq2Pass"); //$NON-NLS-1$
 	private String channel = stringAccessor.getString("HackBot.channel"); //$NON-NLS-1$
+	private String chanPass = stringAccessor.getString("HackBot.channelPass"); //$NON-NLS-1$
 	
 	private static Socket socket;
 	private static BufferedWriter writer;
@@ -74,7 +75,7 @@ public class HackBot implements Runnable {
         logger.trace("Logged into server successfully."); //$NON-NLS-1$
         
         // Join the channel.
-        writer.write("JOIN " + channel + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+        writer.write("JOIN " + channel + " " + chanPass +  "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
         writer.flush( );
         
         new Thread(this).start();
@@ -102,29 +103,43 @@ public class HackBot implements Runnable {
 	            		logger.trace("Youtube link posted."); //$NON-NLS-1$
 	            		YoutubeLink y = new YoutubeLink(i.substring(1));
 	            		writer.write("PRIVMSG " + channel + " :" + "7(Youtube7) " + y.getTitle() + " " + y.getDuration() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	            		writer.write("PRIVMSG " + channel + " :" + "7(Youtube7) " + y.getDescription() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	            		writer.flush();
 	            	}
 	            	else if (i.startsWith(":!online") && line.split("\\s+")[3].equals(":!online")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	            	{
 	            		logger.trace("!online command posted"); //$NON-NLS-1$
-	                    // Connect to CQ2
-	            		if (cq == null)
-	            			cq = new CQ2(cq2User, cq2Pass);
-	            		String user = line.split("\\s+")[4]; //$NON-NLS-1$
-	            		String x = cq.isOnline(user);
-	            		if (null == x)
+	            		try
 	            		{
-	            			writer.write("PRIVMSG " + channel + " :" + user + "? I'm having issues finding that mage right now. I might be having some sort of connection issue. Try again in a few seconds..."+ "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-	            			logger.trace("PRIVMSG " + channel + " :" + user + "? I'm having issues finding that mage right now. I might be having some sort of connection issue. Try again in a few seconds..."+ "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-	            			writer.flush();
-	            			cq = null;
+		                    // Connect to CQ2
+		            		if (cq == null)
+		            			cq = new CQ2(cq2User, cq2Pass);
+		            		String user = line.split("\\s+")[4]; //$NON-NLS-1$
+		            		String x = cq.isOnline(user);
+		            		if (null == x || x.equals(""))
+		            		{
+		            			writer.write("PRIVMSG " + channel + " :" + "I might be having some sort of connection issue. Try again in a few seconds..."+ "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		            			logger.trace("PRIVMSG " + channel + " :" + "I might be having some sort of connection issue. Try again in a few seconds..."+ "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		            			writer.flush();
+		            			cq = null;
+		            		}
+		            		else
+		            		{
+		            			writer.write("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		            			logger.trace("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		            			writer.flush();
+		            		}
 	            		}
-	            		else
+	            		catch (ArrayIndexOutOfBoundsException ex)
 	            		{
-	            			writer.write("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	            			logger.trace("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-	            			writer.flush();
+	            			System.out.println(ex);
+	            			writer.write("PRIVMSG " + channel + " :" + "Enter a valid user" + "\r\n");
+	            			writer.flush();	           	            			
+	            		}
+	            		catch (Exception ex)
+	            		{
+	            			System.out.println(ex);
+	            			writer.write("PRIVMSG " + channel + " :" + "That command caused an error. :( Check logs." + "\r\n");
+	            			writer.flush();	           	  
 	            		}
 	            	}
 	            	else if (i.startsWith(":!rescheck") && line.split("\\s+")[3].equals(":!rescheck")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -136,7 +151,47 @@ public class HackBot implements Runnable {
 	            		String user = line.split("\\s+")[4]; //$NON-NLS-1$
 	            		cq.resCheck(user);
 	            	}
-	            	
+	            	else if (i.startsWith(":!reveal") && line.split("\\s+")[3].equals(":!reveal")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	            	{
+	            		try
+	            		{
+		            		String user = line.split("\\s+")[4]; //$NON-NLS-1$
+		            		logger.trace("!reveal " + user + " posted");
+		            		
+		            		if (cq == null)
+		            			cq = new CQ2(cq2User, cq2Pass);
+		            		String x = cq.findReveal(user);
+		            		
+		            		if (x.equals(stringAccessor.getString("CQ2.db_error")))
+		            		{
+		            			writer.write("PRIVMSG " + channel + " :" + "I can't connect to my database right now." + "\r\n");
+		            			writer.flush();
+		            		}
+		            		else if (x.equals("") || x.equals(null))
+		            		{
+		            			writer.write("PRIVMSG " + channel + " :" + user + " could not be found." + "\r\n");
+		            			writer.flush();	            			
+		            		}
+		            		else
+		            		{
+		            			writer.write("PRIVMSG " + channel + " :" + stringAccessor.getString("CQ2.website") + stringAccessor.getString("CQ2.FindReveals") + x + "\r\n");
+		            			writer.flush();
+		            		}
+	            		}
+	            		catch (ArrayIndexOutOfBoundsException ex)
+	            		{
+	            			System.out.println(ex);
+	            			writer.write("PRIVMSG " + channel + " :" + "Enter a valid user" + "\r\n");
+	            			writer.flush();	           	            			
+	            		}
+	            		catch (Exception ex)
+	            		{
+	            			System.out.println(ex);
+	            			writer.write("PRIVMSG " + channel + " :" + "That command caused an error. :( Check logs." + "\r\n");
+	            			writer.flush();	           	  
+	            		}
+	            		
+	            	}
 
 	            }
 	            
