@@ -8,6 +8,13 @@
 
 4. Project should be ready to run.
 
+Authors
+-------------------------
+Robert Skinner
+
+Hebron George - http://www.hebrongeorge.com
+
+
 
 Commands
 -------------------------
@@ -25,7 +32,3 @@ CQ2 Commands
 	
 
 
-Authors
--------------------------
-Robert Skinner
-Hebron George - http://www.hebrongeorge.com
