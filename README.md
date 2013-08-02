@@ -27,8 +27,14 @@ CQ2 Commands
 -------------------------
 
 !online <username>
+
 	- Returns whether the user is online or offline. If the user is offline, will return how long they have been offline for.
+	
 	- Returns "Invalid User." for an invalid username.
 	
+
+!reveal <username>
+
+	- Returns a link to the user's list if it exists in our database
 
 
