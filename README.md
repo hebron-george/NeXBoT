@@ -25,3 +25,7 @@ CQ2 Commands
 	
 
 
+Authors
+-------------------------
+Robert Skinner
+Hebron George - http://www.hebrongeorge.com
