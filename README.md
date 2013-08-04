@@ -25,7 +25,11 @@ CQ2 Commands
 
 !reveal < username >
 
-	- Returns a link to the user's list if it exists in our database
+	- Returns a link to the user's list if it exists in our database.
+	
+!shard < shard name >
+
+	- Returns a list of users that have that shard.
 
 
 
