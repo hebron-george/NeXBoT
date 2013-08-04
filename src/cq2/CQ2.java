@@ -164,7 +164,7 @@ public class CQ2 {
 		{
 			//STEP 2: Register JDBC driver
 			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Connecting to database...");
+			System.out.println("Connecting to database... for user: " + user);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
 			
 			String sql = "SELECT user FROM reveals WHERE user LIKE ? LIMIT 1";
@@ -185,6 +185,36 @@ public class CQ2 {
 		}
 		
 		return "";
+	}
+	
+	public ArrayList<String> findShard(String shard)
+	{
+		if (shard.equals("") || shard.equals(null))
+			return null;
+		
+		ArrayList<String> users = new ArrayList<String>();
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			
+			String sql = "SELECT user, amount FROM shards WHERE shard LIKE ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, "%" + shard + "%");
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next())
+			{
+				users.add(rs.getString("user") + "("+ rs.getString("amount") + ")");
+			}
+			
+			return users;
+		}
+		catch (Exception ex)
+		{
+			System.out.println(ex);
+			return null;
+		}
 	}
 
 }

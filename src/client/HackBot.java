@@ -3,6 +3,7 @@ package client;
 import java.io.*;
 
 import java.net.*;
+import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -132,13 +133,13 @@ public class HackBot implements Runnable {
 	            		catch (ArrayIndexOutOfBoundsException ex)
 	            		{
 	            			System.out.println(ex);
-	            			writer.write("PRIVMSG " + channel + " :" + "Enter a valid user" + "\r\n");
+	            			writer.write("PRIVMSG " + channel + " :" + "ENTER A VALID USER XD" + "\r\n");
 	            			writer.flush();	           	            			
 	            		}
 	            		catch (Exception ex)
 	            		{
 	            			System.out.println(ex);
-	            			writer.write("PRIVMSG " + channel + " :" + "That command caused an error. :( Check logs." + "\r\n");
+	            			writer.write("PRIVMSG " + channel + " :" + "THAT COMMAND CAUSED AN ERROR XD CHECK LOGS." + "\r\n");
 	            			writer.flush();	           	  
 	            		}
 	            	}
@@ -169,7 +170,7 @@ public class HackBot implements Runnable {
 		            		}
 		            		else if (x.equals("") || x.equals(null))
 		            		{
-		            			writer.write("PRIVMSG " + channel + " :" + user + " could not be found." + "\r\n");
+		            			writer.write("PRIVMSG " + channel + " :" + user + " COULD NOT BE FOUND XD." + "\r\n");
 		            			writer.flush();	            			
 		            		}
 		            		else
@@ -181,16 +182,52 @@ public class HackBot implements Runnable {
 	            		catch (ArrayIndexOutOfBoundsException ex)
 	            		{
 	            			System.out.println(ex);
-	            			writer.write("PRIVMSG " + channel + " :" + "Enter a valid user" + "\r\n");
+	            			writer.write("PRIVMSG " + channel + " :" + "ENTER A VALID USER XD" + "\r\n");
 	            			writer.flush();	           	            			
 	            		}
 	            		catch (Exception ex)
 	            		{
 	            			System.out.println(ex);
-	            			writer.write("PRIVMSG " + channel + " :" + "That command caused an error. :( Check logs." + "\r\n");
+	            			writer.write("PRIVMSG " + channel + " :" + "THTA COMMAND CAUSED AN ERROR XD CHECK LOGS." + "\r\n");
 	            			writer.flush();	           	  
 	            		}
 	            		
+	            	}
+	            	else if (i.startsWith(":!shard") && line.split("\\s+")[3].equals(":!shard"))
+	            	{
+	            		int size = line.split("\\s+").length;
+	            		String lineArray[] = line.split("\\s+");
+	            		try
+	            		{
+	            			String shard = "";
+	            			for (int j = 4; j < size; j++)
+	            			{
+	            				shard += lineArray[j] + " ";
+	            			}
+	            			shard = shard.trim();
+	            			if (cq == null)
+	            				cq = new CQ2(cq2User, cq2Pass);
+	            			
+	            			ArrayList<String> users = cq.findShard(shard);
+	            			if (users == null || users.isEmpty())
+	            			{
+		            			writer.write("PRIVMSG " + channel + " :" + "NOBODY HAS THAT SHARD XD" + "\r\n");
+		            			writer.flush();	   	            				
+	            			}
+	            			else
+	            			{
+		            			writer.write("PRIVMSG " + channel + " :" + users + "\r\n");
+		            			writer.flush();	   
+	            			}
+	            		}
+	            		catch (ArrayIndexOutOfBoundsException ex)
+	            		{
+	            			System.out.println(ex);
+	            		}
+	            		catch (Exception ex)
+	            		{
+	            			System.out.println(ex);
+	            		}
 	            	}
 
 	            }
