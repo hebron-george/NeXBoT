@@ -118,17 +118,16 @@ public class HackBot implements Runnable {
 		            		String x = cq.isOnline(user);
 		            		if (null == x || x.equals(""))
 		            		{
-		            			writer.write("PRIVMSG " + channel + " :" + "I might be having some sort of connection issue. Try again in a few seconds..."+ "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		            			logger.trace("PRIVMSG " + channel + " :" + "I might be having some sort of connection issue. Try again in a few seconds..."+ "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		            			writer.flush();
-		            			cq = null;
+		            			cq = new CQ2(cq2User, cq2Pass);
+		            			x = cq.isOnline(user);
 		            		}
-		            		else
-		            		{
-		            			writer.write("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		            			logger.trace("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		            			writer.flush();
-		            		}
+		            		String channel = "#siralim";
+		                    writer.write("JOIN " + channel +  "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		                    writer.flush( );
+	            			writer.write("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	            			logger.trace("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	            			writer.flush();
+		            		
 	            		}
 	            		catch (ArrayIndexOutOfBoundsException ex)
 	            		{
