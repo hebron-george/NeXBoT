@@ -16,8 +16,7 @@ public class HackBot implements Runnable {
 	private String login = stringAccessor.getString("HackBot.user"); //$NON-NLS-1$
 	private String cq2User = stringAccessor.getString("HackBot.cq2User"); //$NON-NLS-1$
 	private String cq2Pass = stringAccessor.getString("HackBot.cq2Pass"); //$NON-NLS-1$
-	private String channel = stringAccessor.getString("HackBot.channel"); //$NON-NLS-1$
-	private String chanPass = stringAccessor.getString("HackBot.channelPass"); //$NON-NLS-1$
+	private String channels[] = stringAccessor.getString("HackBot.channels").split(","); //$NON-NLS-1$
 	
 	private static Socket socket;
 	private static BufferedWriter writer;
@@ -76,14 +75,17 @@ public class HackBot implements Runnable {
         logger.trace("Logged into server successfully."); //$NON-NLS-1$
         
         // Join the channel.
-        writer.write("JOIN " + channel + " " + chanPass +  "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-        writer.flush( );
+        for (String channel : channels)
+        {
+	        writer.write("JOIN " + channel  +  "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+	        writer.flush( );
+        }
         
         new Thread(this).start();
     }
 	
 	public void run() {
-		String line;
+		String line, channel = "";
 		try {
 			while ((line = reader.readLine( )) != null) {
 	        	// Print the raw line received by the bot.
@@ -101,6 +103,7 @@ public class HackBot implements Runnable {
 	            {
 	            	if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v=")) //$NON-NLS-1$ //$NON-NLS-2$
 	            	{
+	            		channel = getChannel(line);
 	            		logger.trace("Youtube link posted."); //$NON-NLS-1$
 	            		YoutubeLink y = new YoutubeLink(i.substring(1));
 	            		writer.write("PRIVMSG " + channel + " :" + "7(Youtube7) " + y.getTitle() + " " + y.getDuration() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -108,6 +111,7 @@ public class HackBot implements Runnable {
 	            	}
 	            	else if (i.startsWith(":!online") && line.split("\\s+")[3].equals(":!online")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	            	{
+	            		channel = "#siralim"; //!online should only post to #siralim
 	            		logger.trace("!online command posted"); //$NON-NLS-1$
 	            		try
 	            		{
@@ -121,7 +125,6 @@ public class HackBot implements Runnable {
 		            			cq = new CQ2(cq2User, cq2Pass);
 		            			x = cq.isOnline(user);
 		            		}
-		            		String channel = "#siralim";
 		                    writer.write("JOIN " + channel +  "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		                    writer.flush( );
 	            			writer.write("PRIVMSG " + channel + " :" + x + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -144,6 +147,7 @@ public class HackBot implements Runnable {
 	            	}
 	            	else if (i.startsWith(":!rescheck") && line.split("\\s+")[3].equals(":!rescheck")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	            	{
+	            		channel = getChannel(line);
 	            		logger.trace("!rescheck command posted"); //$NON-NLS-1$
 	            		// Connect to CQ2
 	            		if (cq == null)
@@ -153,6 +157,7 @@ public class HackBot implements Runnable {
 	            	}
 	            	else if (i.startsWith(":!reveal") && line.split("\\s+")[3].equals(":!reveal")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	            	{
+	            		channel = getChannel(line);
 	            		try
 	            		{
 		            		String user = line.split("\\s+")[4]; //$NON-NLS-1$
@@ -194,6 +199,7 @@ public class HackBot implements Runnable {
 	            	}
 	            	else if (i.startsWith(":!shard") && line.split("\\s+")[3].equals(":!shard"))
 	            	{
+	            		channel = getChannel(line);
 	            		int size = line.split("\\s+").length;
 	            		String lineArray[] = line.split("\\s+");
 	            		try
@@ -236,5 +242,28 @@ public class HackBot implements Runnable {
 			logger.trace(e.getMessage());
 		}
 	
+	}
+
+	private String getChannel(String line)
+	{
+		try
+		{
+			String portions[] = line.split(" ");
+			if (portions[2].startsWith("#"))
+				return portions[2];		
+		}
+		catch (IndexOutOfBoundsException ex)
+		{
+			//Not a channel message
+			return null;
+		}
+		catch (Exception ex)
+		{
+			//Unexpected Exception
+			System.out.println(ex + " - " + ex.getMessage());
+			return null;
+		}
+		
+		return null;
 	}
 }
