@@ -164,7 +164,7 @@ public class HackBot implements Runnable {
 		            		
 		            		if (x.equals(stringAccessor.getString("CQ2.db_error")))
 		            		{
-		            			writer.write("PRIVMSG " + channel + " :" + "I can't connect to my database right now." + "\r\n");
+		            			writer.write("PRIVMSG " + channel + " :" + "WHOOPSIE, I CAN'T CONNECT TO THE DATABASE RIGHT NOW XD." + "\r\n");
 		            			writer.flush();
 		            		}
 		            		else if (x.equals("") || x.equals(null))
@@ -187,7 +187,7 @@ public class HackBot implements Runnable {
 	            		catch (Exception ex)
 	            		{
 	            			System.out.println(ex);
-	            			writer.write("PRIVMSG " + channel + " :" + "THTA COMMAND CAUSED AN ERROR XD CHECK LOGS." + "\r\n");
+	            			writer.write("PRIVMSG " + channel + " :" + "THAT COMMAND CAUSED AN ERROR XD CHECK LOGS." + "\r\n");
 	            			writer.flush();	           	  
 	            		}
 	            		
