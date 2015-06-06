@@ -77,7 +77,9 @@ public class HackBot implements Runnable {
         // Join the channel.
         for (String channel : channels)
         {
+        	System.out.println("JOIN " + channel  +  "\r\n");
 	        writer.write("JOIN " + channel  +  "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+	        logger.trace("JOIN " + channel  +  "\r\n");
 	        writer.flush( );
         }
         

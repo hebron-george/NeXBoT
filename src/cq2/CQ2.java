@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,7 +27,6 @@ public class CQ2 {
 	HttpResponse response = null;
 	String line = "";
 
-	private String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
 	private String DB_URL = "jdbc:mysql://108.167.163.247/vashy_cq2";
 	//  Database credentials
 	private String USER = stringAccessor.getString("CQ2.db_user");
