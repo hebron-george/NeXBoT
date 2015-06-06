@@ -22,3 +22,4 @@ Thumbs.db
 ##############
 *.class
 /bin/
+config.properties
