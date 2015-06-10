@@ -101,14 +101,32 @@ public class HackBot implements Runnable {
 	            }
 	            
 	            
-	            for (String i : line.split("\\s+")) //$NON-NLS-1$
+	            for (String i : line.split(" ")) //$NON-NLS-1$
 	            {
-	            	if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v=")) //$NON-NLS-1$ //$NON-NLS-2$
+	            	if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v=")
+	            		|| i.startsWith("http://www.youtube.com/watch?v=") || i.startsWith("https://www.youtube.com/watch?v=")) //$NON-NLS-1$ //$NON-NLS-2$
 	            	{
 	            		channel = getChannel(line);
 	            		logger.trace("Youtube link posted."); //$NON-NLS-1$
-	            		YoutubeLink y = new YoutubeLink(i.substring(1));
-	            		writer.write("PRIVMSG " + channel + " :" + "7(Youtube7) " + y.getTitle() + " " + y.getDuration() + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	            		YoutubeLink y = null;
+	            		if (i.charAt(0) == ':')
+	            			y = new YoutubeLink(i.substring(1));
+	            		else
+	            			y = new YoutubeLink(i);
+	            		writer.write("PRIVMSG " + channel + " :" + y.summary() + "\r\n");
+	            		writer.flush();
+	            	}
+	            	else if (i.startsWith(":http://www.reddit.com/") || i.startsWith(":https://www.reddit.com/")
+	            			|| i.startsWith("http://www.reddit.com/") || i.startsWith("https://www.reddit.com/"))
+	            	{
+	            		channel = getChannel(line);
+	            		logger.trace("Reddit link posted.");
+	            		RedditLink r;
+	            		if (i.charAt(0) == ':')
+	            			r = new RedditLink(i.substring(1));
+	            		else
+	            			r = new RedditLink(i);
+	            		writer.write("PRIVMSG " + channel + " :" + r.summary() + "\r\n");
 	            		writer.flush();
 	            	}
 	            	else if (i.startsWith(":!online") && line.split("\\s+")[3].equals(":!online")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -242,6 +260,8 @@ public class HackBot implements Runnable {
 	        }
 		} catch (Exception e) {
 			logger.trace(e.getMessage());
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	
 	}
