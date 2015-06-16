@@ -10,7 +10,10 @@ public abstract class Link {
 	Document doc;
 	Link(String url) {
 		try {
-			doc = Jsoup.connect(url).get();
+			/* I set a very long time out here because the raspberry pi
+			 * this is running off of has a very slow network interface card
+			 */
+			doc = Jsoup.connect(url).timeout(30*1000).get();
 			title = doc.title();
 		} catch (IOException e) {
 			e.printStackTrace();
