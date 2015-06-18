@@ -11,11 +11,15 @@ public class RedditLink extends Link {
 
 	@Override
 	public String summary() {
-		Elements e = doc.select("div#siteTable");
-		Element firstChild = e.get(0);
-		String upvotes = firstChild.select("div.likes").get(0).html();
-		String sub = getTitle().split(":")[1];
-		return "7(Reddit 7| " + upvotes + " upvotes 7| /r/" + sub.trim() + "7) " + getTitle().split(":")[0];
+		try {
+			Elements e = doc.select("div#siteTable");
+			Element firstChild = e.get(0);
+			String upvotes = firstChild.select("div.likes").get(0).html();
+			String sub = getTitle().split(":")[1];
+			return "7(Reddit 7| " + upvotes + " upvotes 7| /r/" + sub.trim() + "7) " + getTitle().split(":")[0];
+		} catch (Exception e) {
+			return "7(Reddit7) There was an error opening the Reddit link. Try again in a few seconds...";
+		}
 	}
 
 }
