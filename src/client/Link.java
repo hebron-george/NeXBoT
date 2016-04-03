@@ -23,6 +23,10 @@ public abstract class Link {
 	public String getTitle() {
 		return title;
 	}
-	
+
+	/**
+	 * Each link type should have it's own summary to print to the channel
+	 * @return String
+     */
 	public abstract String summary();
 }
