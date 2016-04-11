@@ -123,6 +123,9 @@ public class HackBot implements Runnable {
                     }
                 }
             }
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.out.println(se.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
