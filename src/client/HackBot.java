@@ -46,7 +46,6 @@ public class HackBot implements Runnable {
         HackBot.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         System.out.println("Reader Initialized.");
 
-        System.out.println("After initializing start() variables.");
         // Log on to the server.
         writer.write("NICK " + nick + "\r\n");
         writer.write("USER " + login + " 8 * : Java IRC Hacks Bot\r\n");
