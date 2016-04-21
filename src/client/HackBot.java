@@ -29,7 +29,7 @@ public class HackBot implements Runnable {
     private void start() throws Exception {
         Properties prop = new Properties();
         InputStream in = null;
-        in = new FileInputStream(System.getProperty("user.dir") + "\\" + "config.properties");
+        in = new FileInputStream(System.getProperty("user.dir") + "/" + "config.properties");
 
         prop.load(in);
 
@@ -55,18 +55,18 @@ public class HackBot implements Runnable {
         String line = null;
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
-            if (line.indexOf("004") >= 0) { //$NON-NLS-1$
+            if (line.indexOf("004") >= 0) {
                 // We are now logged in.
                 break;
-            } else if (line.indexOf("433") >= 0) { //$NON-NLS-1$
-                System.out.println("Nickname is already in use."); //$NON-NLS-1$
+            } else if (line.indexOf("433") >= 0) {
+                System.out.println("Nickname is already in use.");
                 return;
             }
 
             if (line.startsWith("PING ")) { //$NON-NLS-1$
                 // We must respond to PINGs to avoid being disconnected.
-                writer.write("PONG " + line.substring(5) + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-                System.out.println("PONG " + line.substring(5) + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+                writer.write("PONG " + line.substring(5) + "\r\n");
+                System.out.println("PONG " + line.substring(5) + "\r\n");
                 writer.flush();
             }
         }
@@ -75,7 +75,7 @@ public class HackBot implements Runnable {
         // Join the channel.
         for (String channel : channels) {
             System.out.println("JOIN " + channel + "\r\n");
-            writer.write("JOIN " + channel + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+            writer.write("JOIN " + channel + "\r\n");
             writer.flush();
         }
 
@@ -89,36 +89,36 @@ public class HackBot implements Runnable {
                 // Print the raw line received by the bot.
                 System.out.println(line);
 
-                if (line.startsWith("PING ")) { //$NON-NLS-1$
+                if (line.startsWith("PING ")) {
                     // We must respond to PINGs to avoid being disconnected.
-                    writer.write("PONG " + line.substring(5) + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+                    writer.write("PONG " + line.substring(5) + "\r\n");
                     writer.flush();
-                }
+                } else {
 
-
-                for (String i : line.split(" ")) //$NON-NLS-1$
-                {
-                    if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v=")
-                            || i.startsWith("http://www.youtube.com/watch?v=") || i.startsWith("https://www.youtube.com/watch?v=")) //$NON-NLS-1$ //$NON-NLS-2$
+                    for (String i : line.split(" "))
                     {
-                        channel = getChannel(line);
-                        YoutubeLink y = null;
-                        if (i.charAt(0) == ':')
-                            y = new YoutubeLink(i.substring(1));
-                        else
-                            y = new YoutubeLink(i);
-                        writer.write("PRIVMSG " + channel + " :" + y.summary() + "\r\n");
-                        writer.flush();
-                    } else if (i.startsWith(":http://www.reddit.com/") || i.startsWith(":https://www.reddit.com/")
-                            || i.startsWith("http://www.reddit.com/") || i.startsWith("https://www.reddit.com/")) {
-                        channel = getChannel(line);
-                        RedditLink r;
-                        if (i.charAt(0) == ':')
-                            r = new RedditLink(i.substring(1));
-                        else
-                            r = new RedditLink(i);
-                        writer.write("PRIVMSG " + channel + " :" + r.summary() + "\r\n");
-                        writer.flush();
+                        if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v=")
+                                || i.startsWith("http://www.youtube.com/watch?v=") || i.startsWith("https://www.youtube.com/watch?v=")) //$NON-NLS-1$ //$NON-NLS-2$
+                        {
+                            channel = getChannel(line);
+                            YoutubeLink y = null;
+                            if (i.charAt(0) == ':')
+                                y = new YoutubeLink(i.substring(1));
+                            else
+                                y = new YoutubeLink(i);
+                            writer.write("PRIVMSG " + channel + " :" + y.summary() + "\r\n");
+                            writer.flush();
+                        } else if (i.startsWith(":http://www.reddit.com/") || i.startsWith(":https://www.reddit.com/")
+                                || i.startsWith("http://www.reddit.com/") || i.startsWith("https://www.reddit.com/")) {
+                            channel = getChannel(line);
+                            RedditLink r;
+                            if (i.charAt(0) == ':')
+                                r = new RedditLink(i.substring(1));
+                            else
+                                r = new RedditLink(i);
+                            writer.write("PRIVMSG " + channel + " :" + r.summary() + "\r\n");
+                            writer.flush();
+                        }
                     }
                 }
             }

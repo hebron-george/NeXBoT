@@ -13,25 +13,6 @@ https://www.youtube.com/watch?v=xxxxxxxxxxxx OR http://www.youtube.com/watch?v=x
 	- Returns the title of the page
 
 
-CQ2 Commands
--------------------------
-
-!online < username >
-
-	- Returns whether the user is online or offline. If the user is offline, will return how long they have been offline for.
-	
-	- Returns "Invalid User." for an invalid username.
-	
-
-!reveal < username >
-
-	- Returns a link to the user's list if it exists in our database.
-	
-!shard < shard name >
-
-	- Returns a list of users that have that shard.
-
-
 
 Setup
 -------------------------
