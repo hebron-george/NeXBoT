@@ -1,4 +1,4 @@
-package client;
+package client.commands;
 
 import org.jsoup.nodes.Element;
 
@@ -9,7 +9,7 @@ public class YoutubeLink extends Link {
 	private int durationMin = 0, durationSec = 0;
 	private String description = "", likes = "", views = "";
 
-	YoutubeLink(String url) {
+	public YoutubeLink(String url) {
 		super(url);
 		duration = doc.select("meta[itemprop=duration]").attr("content");
 		duration = duration.replace("PT", "");

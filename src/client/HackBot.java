@@ -1,5 +1,8 @@
 package client;
 
+import client.commands.RedditLink;
+import client.commands.YoutubeLink;
+
 import java.io.*;
 import java.io.FileInputStream;
 
@@ -63,7 +66,7 @@ public class HackBot implements Runnable {
                 return;
             }
 
-            if (line.startsWith("PING ")) { //$NON-NLS-1$
+            if (line.startsWith("PING ")) {
                 // We must respond to PINGs to avoid being disconnected.
                 writer.write("PONG " + line.substring(5) + "\r\n");
                 System.out.println("PONG " + line.substring(5) + "\r\n");

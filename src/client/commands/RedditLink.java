@@ -1,11 +1,11 @@
-package client;
+package client.commands;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class RedditLink extends Link {
 
-	RedditLink(String url) {
+	public RedditLink(String url) {
 		super(url);
 	}
 
