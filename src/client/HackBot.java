@@ -57,7 +57,6 @@ public class HackBot implements Runnable {
         // Read lines from the server until it tells us we have connected.
         String line = null;
         while ((line = reader.readLine()) != null) {
-            System.out.println(line);
             if (line.indexOf("004") >= 0) {
                 // We are now logged in.
                 break;
@@ -71,6 +70,8 @@ public class HackBot implements Runnable {
                 writer.write("PONG " + line.substring(5) + "\r\n");
                 System.out.println("PONG " + line.substring(5) + "\r\n");
                 writer.flush();
+            } else {
+                System.out.println(line);
             }
         }
 
