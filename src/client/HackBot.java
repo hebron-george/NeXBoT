@@ -1,12 +1,12 @@
 package client;
 
 import client.commands.RedditLink;
-import client.commands.YoutubeLink;
 
 import java.io.*;
 import java.io.FileInputStream;
 
 import java.net.*;
+import java.util.Objects;
 import java.util.Properties;
 
 public class HackBot implements Runnable {
@@ -102,16 +102,10 @@ public class HackBot implements Runnable {
                     for (String i : line.split(" "))
                     {
                         if (i.startsWith(":http://www.youtube.com/watch?v=") || i.startsWith(":https://www.youtube.com/watch?v=")
-                                || i.startsWith("http://www.youtube.com/watch?v=") || i.startsWith("https://www.youtube.com/watch?v=")) //$NON-NLS-1$ //$NON-NLS-2$
-                        {
-                            channel = getChannel(line);
-                            YoutubeLink y = null;
-                            if (i.charAt(0) == ':')
-                                y = new YoutubeLink(i.substring(1));
-                            else
-                                y = new YoutubeLink(i);
-                            writer.write("PRIVMSG " + channel + " :" + y.summary() + "\r\n");
-                            writer.flush();
+                                || i.startsWith("http://www.youtube.com/watch?v=") || i.startsWith("https://www.youtube.com/watch?v=")){
+                            System.out.println("Detected Youtube Paste ");
+                            Runnable r = new LineHandler(line, i, writer);
+                            new Thread(r).start();
                         } else if (i.startsWith(":http://www.reddit.com/") || i.startsWith(":https://www.reddit.com/")
                                 || i.startsWith("http://www.reddit.com/") || i.startsWith("https://www.reddit.com/")) {
                             channel = getChannel(line);
@@ -121,6 +115,9 @@ public class HackBot implements Runnable {
                             else
                                 r = new RedditLink(i);
                             writer.write("PRIVMSG " + channel + " :" + r.summary() + "\r\n");
+                            writer.flush();
+                        } else if (Objects.equals(line, ":Vashy!~Vashy@Vashy.users.quakenet.org PRIVMSG #nexy :nexi restart()")){
+                            writer.write("QUIT bye <3" + "\r\n");
                             writer.flush();
                         }
                     }
